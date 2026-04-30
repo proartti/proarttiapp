@@ -1,5 +1,8 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 export default function Index({ clients, filters }) {
     const onSearch = (event) => {
@@ -21,67 +24,90 @@ export default function Index({ clients, filters }) {
             <Head title="Clients" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-4 sm:px-6 lg:px-8">
-                    <div className="rounded-lg bg-white p-4 shadow-sm">
+                <div className="mx-auto space-y-4 max-w-7xl sm:px-6 lg:px-8">
+                    <div className="p-4 rounded-lg shadow-sm bg-card">
                         <div className="flex items-center justify-between gap-4">
-                            <input
+                            <Input
                                 type="text"
-                                className="w-full max-w-sm rounded-md border-gray-300 shadow-sm"
+                                className="max-w-sm"
                                 defaultValue={filters.search ?? ""}
                                 placeholder="Search by name or email"
                                 onChange={onSearch}
                             />
-                            <Link
-                                href={route("clients.create")}
-                                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white"
-                            >
-                                New Client
-                            </Link>
+                            <Button asChild>
+                                <Link href={route("clients.create")}>
+                                    New Client
+                                </Link>
+                            </Button>
                         </div>
                     </div>
 
-                    <div className="overflow-hidden rounded-lg bg-white shadow-sm">
-                        <table className="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead className="bg-gray-50">
+                    <div className="overflow-hidden rounded-lg shadow-sm bg-card">
+                        <table className="min-w-full text-sm divide-y divide-border">
+                            <thead className="bg-muted/50">
                                 <tr>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-600">
+                                    <th className="px-4 py-3 font-medium text-left text-muted-foreground">
                                         Name
                                     </th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-600">
+                                    <th className="px-4 py-3 font-medium text-left text-muted-foreground">
                                         Email
                                     </th>
-                                    <th className="px-4 py-3 text-left font-medium text-gray-600">
+                                    <th className="px-4 py-3 font-medium text-left text-muted-foreground">
                                         Status
                                     </th>
-                                    <th className="px-4 py-3 text-right font-medium text-gray-600">
+                                    <th className="px-4 py-3 font-medium text-right text-muted-foreground">
                                         Actions
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 bg-white">
+                            <tbody className="divide-y divide-border">
+                                {clients.data.length === 0 && (
+                                    <tr>
+                                        <td
+                                            colSpan={4}
+                                            className="px-4 py-8 text-center text-muted-foreground"
+                                        >
+                                            No clients found.
+                                        </td>
+                                    </tr>
+                                )}
                                 {clients.data.map((client) => (
-                                    <tr key={client.id}>
-                                        <td className="px-4 py-3 text-gray-900">
+                                    <tr
+                                        key={client.id}
+                                        className="transition-colors hover:bg-muted/30"
+                                    >
+                                        <td className="px-4 py-3 font-medium">
                                             {client.name}
                                         </td>
-                                        <td className="px-4 py-3 text-gray-600">
+                                        <td className="px-4 py-3 text-muted-foreground">
                                             {client.email ?? "-"}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">
+                                            <Badge
+                                                variant={
+                                                    client.status === "active"
+                                                        ? "default"
+                                                        : "secondary"
+                                                }
+                                            >
                                                 {client.status}
-                                            </span>
+                                            </Badge>
                                         </td>
                                         <td className="px-4 py-3 text-right">
-                                            <Link
-                                                href={route(
-                                                    "clients.edit",
-                                                    client.id,
-                                                )}
-                                                className="text-sm font-medium text-gray-900"
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                asChild
                                             >
-                                                Edit
-                                            </Link>
+                                                <Link
+                                                    href={route(
+                                                        "clients.edit",
+                                                        client.id,
+                                                    )}
+                                                >
+                                                    Edit
+                                                </Link>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}

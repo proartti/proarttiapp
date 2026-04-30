@@ -1,5 +1,10 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select } from "@/components/ui/select";
 
 export default function Create() {
     const form = useForm({
@@ -29,69 +34,108 @@ export default function Create() {
                 <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
                     <form
                         onSubmit={submit}
-                        className="space-y-4 rounded-lg bg-white p-6 shadow-sm"
+                        className="space-y-5 rounded-lg bg-card p-6 shadow-sm"
                     >
-                        <input
-                            type="text"
-                            className="w-full rounded-md border-gray-300"
-                            placeholder="Client name"
-                            value={form.data.name}
-                            onChange={(event) =>
-                                form.setData("name", event.target.value)
-                            }
-                        />
-                        <input
-                            type="email"
-                            className="w-full rounded-md border-gray-300"
-                            placeholder="Email"
-                            value={form.data.email}
-                            onChange={(event) =>
-                                form.setData("email", event.target.value)
-                            }
-                        />
-                        <input
-                            type="text"
-                            className="w-full rounded-md border-gray-300"
-                            placeholder="Phone"
-                            value={form.data.phone}
-                            onChange={(event) =>
-                                form.setData("phone", event.target.value)
-                            }
-                        />
-                        <select
-                            className="w-full rounded-md border-gray-300"
-                            value={form.data.status}
-                            onChange={(event) =>
-                                form.setData("status", event.target.value)
-                            }
-                        >
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                        <textarea
-                            className="w-full rounded-md border-gray-300"
-                            rows={4}
-                            placeholder="Notes"
-                            value={form.data.notes}
-                            onChange={(event) =>
-                                form.setData("notes", event.target.value)
-                            }
-                        />
+                        <div className="space-y-1.5">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                placeholder="Client name"
+                                value={form.data.name}
+                                onChange={(e) =>
+                                    form.setData("name", e.target.value)
+                                }
+                            />
+                            {form.errors.name && (
+                                <p className="text-xs text-destructive">
+                                    {form.errors.name}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="email@example.com"
+                                value={form.data.email}
+                                onChange={(e) =>
+                                    form.setData("email", e.target.value)
+                                }
+                            />
+                            {form.errors.email && (
+                                <p className="text-xs text-destructive">
+                                    {form.errors.email}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label htmlFor="phone">Phone</Label>
+                            <Input
+                                id="phone"
+                                type="text"
+                                placeholder="+1 555 000 0000"
+                                value={form.data.phone}
+                                onChange={(e) =>
+                                    form.setData("phone", e.target.value)
+                                }
+                            />
+                            {form.errors.phone && (
+                                <p className="text-xs text-destructive">
+                                    {form.errors.phone}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label htmlFor="status">Status</Label>
+                            <Select
+                                id="status"
+                                value={form.data.status}
+                                onChange={(e) =>
+                                    form.setData("status", e.target.value)
+                                }
+                            >
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </Select>
+                            {form.errors.status && (
+                                <p className="text-xs text-destructive">
+                                    {form.errors.status}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <Label htmlFor="notes">Notes</Label>
+                            <Textarea
+                                id="notes"
+                                rows={4}
+                                placeholder="Optional notes"
+                                value={form.data.notes}
+                                onChange={(e) =>
+                                    form.setData("notes", e.target.value)
+                                }
+                            />
+                            {form.errors.notes && (
+                                <p className="text-xs text-destructive">
+                                    {form.errors.notes}
+                                </p>
+                            )}
+                        </div>
 
                         <div className="flex items-center justify-end gap-3">
-                            <Link
-                                href={route("clients.index")}
-                                className="text-sm text-gray-600"
-                            >
-                                Cancel
-                            </Link>
-                            <button
-                                type="submit"
-                                disabled={form.processing}
-                                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white"
-                            >
+                            <Button variant="ghost" asChild>
+                                <Link href={route("clients.index")}>
+                                    Cancel
+                                </Link>
+                            </Button>
+                            <Button type="submit" disabled={form.processing}>
                                 Save
-                            </button>
+                            </Button>
                         </div>
                     </form>
                 </div>
