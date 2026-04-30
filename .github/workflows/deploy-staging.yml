@@ -36,7 +36,7 @@ jobs:
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.STAGING_PRIVATE_KEY }}
 
       - name: Sync release to staging host
         run: |
@@ -45,9 +45,9 @@ jobs:
             --exclude='node_modules' \
             --exclude='tests' \
             --exclude='.env' \
-            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/
+            ./ ${{ secrets.STAGING_DEPLOY_USER }}@${{ secrets.STAGING_DEPLOY_HOST }}:${{ secrets.STAGING_DEPLOY_PATH }}/
 
       - name: Run remote release script
         run: |
-          ssh -p ${{ secrets.DEPLOY_PORT }} ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "cd ${{ secrets.DEPLOY_PATH }} && bash scripts/deploy/release.sh staging"
+          ssh -p ${{ secrets.STAGING_DEPLOY_PORT }} ${{ secrets.STAGING_DEPLOY_USER }}@${{ secrets.STAGING_DEPLOY_HOST }} \
+            "cd ${{ secrets.STAGING_DEPLOY_PATH }} && bash scripts/deploy/release.sh staging"
