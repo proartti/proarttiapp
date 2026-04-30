@@ -12,7 +12,6 @@ echo "Starting ${ENVIRONMENT} release"
 
 php artisan down || true
 
-composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
