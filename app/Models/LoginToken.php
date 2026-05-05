@@ -26,6 +26,7 @@ class LoginToken extends Model
 
     public function markUsed(): void
     {
-        $this->update(['used_at' => now()]);
+        $this->used_at = now();
+        $this->save();
     }
 }
