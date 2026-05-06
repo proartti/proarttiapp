@@ -17,6 +17,8 @@ class ClientController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', Client::class);
+
         $search = request('search');
 
         $clients = Client::query()
@@ -39,6 +41,8 @@ class ClientController extends Controller
      */
     public function create(): Response
     {
+        $this->authorize('create', Client::class);
+
         return Inertia::render('Clients/Create');
     }
 
@@ -47,6 +51,8 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request): RedirectResponse
     {
+        $this->authorize('create', Client::class);
+
         Client::create($request->validated());
 
         return redirect()
@@ -59,6 +65,8 @@ class ClientController extends Controller
      */
     public function show(Client $client): Response
     {
+        $this->authorize('view', $client);
+
         return Inertia::render('Clients/Edit', [
             'client' => $client,
             'readonly' => true,
@@ -70,6 +78,8 @@ class ClientController extends Controller
      */
     public function edit(Client $client): Response
     {
+        $this->authorize('update', $client);
+
         return Inertia::render('Clients/Edit', [
             'client' => $client,
             'readonly' => false,
@@ -81,6 +91,8 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
+        $this->authorize('update', $client);
+
         $client->update($request->validated());
 
         return redirect()
@@ -93,6 +105,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client): RedirectResponse
     {
+        $this->authorize('delete', $client);
+
         $client->delete();
 
         return redirect()

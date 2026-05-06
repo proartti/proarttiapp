@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Client;
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,7 +17,10 @@ class ClientWebTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->seed(RolesAndPermissionsSeeder::class);
         $this->user = User::factory()->create();
+        $this->user->assignRole('administrator');
     }
 
     // ---------- Index ----------
@@ -99,6 +103,19 @@ class ClientWebTest extends TestCase
             ->assertSessionHasErrors('email');
     }
 
+    public function test_store_forbids_user_without_clients_create_permission(): void
+    {
+        $clientUser = User::factory()->create();
+        $clientUser->assignRole('client');
+
+        $this->actingAs($clientUser)
+            ->post(route('clients.store'), [
+                'name' => 'Forbidden Client',
+                'status' => 'active',
+            ])
+            ->assertForbidden();
+    }
+
     // ---------- Edit ----------
 
     public function test_edit_page_renders(): void
@@ -154,5 +171,16 @@ class ClientWebTest extends TestCase
             ->assertRedirect(route('clients.index'));
 
         $this->assertSoftDeleted('clients', ['id' => $client->id]);
+    }
+
+    public function test_destroy_forbids_user_without_clients_delete_permission(): void
+    {
+        $client = Client::factory()->create();
+        $clientUser = User::factory()->create();
+        $clientUser->assignRole('client');
+
+        $this->actingAs($clientUser)
+            ->delete(route('clients.destroy', $client))
+            ->assertForbidden();
     }
 }

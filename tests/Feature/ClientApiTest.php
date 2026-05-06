@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Client;
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,7 +17,10 @@ class ClientApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->seed(RolesAndPermissionsSeeder::class);
         $this->user = User::factory()->create();
+        $this->user->assignRole('administrator');
     }
 
     private function actingAsApi(): static
@@ -128,5 +132,18 @@ class ClientApiTest extends TestCase
             ->assertJsonPath('message', 'Client archived successfully.');
 
         $this->assertSoftDeleted('clients', ['id' => $client->id]);
+    }
+
+    public function test_api_store_forbids_user_without_clients_create_permission(): void
+    {
+        $clientUser = User::factory()->create();
+        $clientUser->assignRole('client');
+
+        $this->actingAs($clientUser, 'sanctum')
+            ->postJson(route('api.v1.clients.store'), [
+                'name' => 'Forbidden API Client',
+                'status' => 'active',
+            ])
+            ->assertForbidden();
     }
 }

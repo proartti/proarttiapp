@@ -1,4 +1,5 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import Can from "@/Components/Can";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
@@ -36,6 +37,22 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Clients
                                 </NavLink>
+                                <Can permission="USERS.READ">
+                                    <NavLink
+                                        href={route("users.index")}
+                                        active={route().current("users.*")}
+                                    >
+                                        Users
+                                    </NavLink>
+                                </Can>
+                                <Can permission="ROLES.READ">
+                                    <NavLink
+                                        href={route("roles.index")}
+                                        active={route().current("roles.*")}
+                                    >
+                                        Roles
+                                    </NavLink>
+                                </Can>
                             </div>
                         </div>
 
@@ -146,6 +163,22 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Clients
                         </ResponsiveNavLink>
+                        <Can permission="USERS.READ">
+                            <ResponsiveNavLink
+                                href={route("users.index")}
+                                active={route().current("users.*")}
+                            >
+                                Users
+                            </ResponsiveNavLink>
+                        </Can>
+                        <Can permission="ROLES.READ">
+                            <ResponsiveNavLink
+                                href={route("roles.index")}
+                                active={route().current("roles.*")}
+                            >
+                                Roles
+                            </ResponsiveNavLink>
+                        </Can>
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">

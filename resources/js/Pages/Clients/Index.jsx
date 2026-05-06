@@ -3,8 +3,12 @@ import { Head, Link, router } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useCan } from "@/lib/can";
 
 export default function Index({ clients, filters }) {
+    const canCreateClients = useCan("CLIENTS.CREATE");
+    const canUpdateClients = useCan("CLIENTS.UPDATE");
+
     const onSearch = (event) => {
         router.get(
             route("clients.index"),
@@ -34,11 +38,13 @@ export default function Index({ clients, filters }) {
                                 placeholder="Search by name or email"
                                 onChange={onSearch}
                             />
-                            <Button asChild>
-                                <Link href={route("clients.create")}>
-                                    New Client
-                                </Link>
-                            </Button>
+                            {canCreateClients && (
+                                <Button asChild>
+                                    <Link href={route("clients.create")}>
+                                        New Client
+                                    </Link>
+                                </Button>
+                            )}
                         </div>
                     </div>
 
@@ -101,11 +107,15 @@ export default function Index({ clients, filters }) {
                                             >
                                                 <Link
                                                     href={route(
-                                                        "clients.edit",
+                                                        canUpdateClients
+                                                            ? "clients.edit"
+                                                            : "clients.show",
                                                         client.id,
                                                     )}
                                                 >
-                                                    Edit
+                                                    {canUpdateClients
+                                                        ? "Edit"
+                                                        : "View"}
                                                 </Link>
                                             </Button>
                                         </td>

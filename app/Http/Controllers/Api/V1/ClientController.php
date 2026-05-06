@@ -17,6 +17,8 @@ class ClientController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
+        $this->authorize('viewAny', Client::class);
+
         $search = request('search');
 
         $clients = Client::query()
@@ -36,6 +38,8 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request): JsonResponse
     {
+        $this->authorize('create', Client::class);
+
         $client = Client::create($request->validated());
 
         return (new ClientResource($client))
@@ -48,6 +52,8 @@ class ClientController extends Controller
      */
     public function show(Client $client): ClientResource
     {
+        $this->authorize('view', $client);
+
         return new ClientResource($client);
     }
 
@@ -56,6 +62,8 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client): ClientResource
     {
+        $this->authorize('update', $client);
+
         $client->update($request->validated());
 
         return new ClientResource($client->fresh());
@@ -66,6 +74,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client): JsonResponse
     {
+        $this->authorize('delete', $client);
+
         $client->delete();
 
         return response()->json([
