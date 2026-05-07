@@ -11,8 +11,6 @@
 - Bootstrapped Laravel 12.58.0 project into repository while preserving existing docs.
 - Installed Breeze React stack (Inertia + React + Sanctum + Ziggy) and verified Vite production build.
 - Added API v1 route surface (`/api/v1`) and wired API routing in bootstrap configuration.
-- Implemented initial Client domain CRUD scaffolding for web and API layers.
-- Added Inertia pages for client listing, creation, and editing.
 - Verified migrations, routes, and frontend build after CRUD wiring.
 - Added GitHub Actions CI workflow and staging/production deploy workflows.
 - Created remote release script `scripts/deploy/release.sh`.

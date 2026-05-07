@@ -21,10 +21,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'USERS.READ',
             'USERS.UPDATE',
             'USERS.DELETE',
-            'CLIENTS.CREATE',
-            'CLIENTS.READ',
-            'CLIENTS.UPDATE',
-            'CLIENTS.DELETE',
             'ROLES.CREATE',
             'ROLES.READ',
             'ROLES.UPDATE',
@@ -43,9 +39,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $clientRole = Role::findOrCreate('client', 'web');
 
         $administratorRole->syncPermissions($permissionModels);
-        $clientRole->syncPermissions(
-            $permissionModels->where('name', 'CLIENTS.READ')
-        );
+        $clientRole->syncPermissions([]);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

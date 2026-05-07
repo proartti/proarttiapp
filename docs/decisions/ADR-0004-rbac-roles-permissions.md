@@ -39,10 +39,6 @@ Initial seeded permissions:
 - `USERS.READ`
 - `USERS.UPDATE`
 - `USERS.DELETE`
-- `CLIENTS.CREATE`
-- `CLIENTS.READ`
-- `CLIENTS.UPDATE`
-- `CLIENTS.DELETE`
 - `ROLES.CREATE`
 - `ROLES.READ`
 - `ROLES.UPDATE`
@@ -51,7 +47,7 @@ Initial seeded permissions:
 Initial seeded assignments:
 
 - `administrator` receives all permissions
-- `client` receives `CLIENTS.READ`
+- `client` receives no permissions
 
 Public registration is removed from guest routes. New users are created by administrators in the application UI. During creation, the admin can optionally enable `send_invite`; when enabled, the system generates a login token and sends the existing magic-link email.
 
@@ -74,6 +70,5 @@ Tradeoffs:
 
 The RBAC implementation is covered by:
 
-- feature tests for role-protected client access on web and API
-- feature tests for user management and role management
+- feature tests for role-protected user management and role management
 - unit tests for policy edge cases like self-delete protection and administrator role delete protection
